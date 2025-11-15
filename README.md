@@ -333,6 +333,6 @@ Si encuentras errores o tienes sugerencias de mejora:
 
 ## 📄 Licencia
 
-Este proyecto es de código abierto y está disponible para todos.
+Este proyecto es de código abierto y está disponible para todos...
 
 ```
