@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Patrón Template Method - Infografía</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      :root {
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --accent-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --dark-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        --gold-gradient: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+        --green-gradient: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+        --purple-dark: #2d1b4e;
+        --text-dark: #1a202c;
+        --text-light: #718096;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: #0f0c29;
+        background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+        background-attachment: fixed;
+        padding: 0;
+        min-height: 100vh;
+        color: var(--text-dark);
+        overflow-x: hidden;
+      }
+
+      /* Particles background effect */
+      .particles {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+        pointer-events: none;
+      }
+
+      .particle {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 50%;
+        animation: float 20s infinite;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0) translateX(0);
+        }
+        25% {
+          transform: translateY(-100px) translateX(50px);
+        }
+        50% {
+          transform: translateY(-50px) translateX(-50px);
+        }
+        75% {
+          transform: translateY(-150px) translateX(30px);
+        }
+      }
+
+      .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        position: relative;
+        z-index: 1;
+      }
+
+      /* Hero Header */
+      header {
+        text-align: center;
+        color: white;
+        padding: 100px 20px 80px;
+        margin-bottom: 60px;
+        position: relative;
+        animation: fadeInDown 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+
+      header::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(
+          circle,
+          rgba(102, 126, 234, 0.3) 0%,
+          transparent 70%
+        );
+        border-radius: 50%;
+        z-index: -1;
+        animation: pulse 4s ease-in-out infinite;
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          transform: translate(-50%, -50%) scale(1);
+          opacity: 0.5;
+        }
+        50% {
+          transform: translate(-50%, -50%) scale(1.1);
+          opacity: 0.8;
+        }
+      }
+
+      .header-badge {
+        display: inline-block;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 10px 30px;
+        border-radius: 50px;
+        font-size: 0.85em;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        margin-bottom: 25px;
+        animation: slideIn 1s ease-out 0.3s both;
+      }
+
+      header h1 {
+        font-family: "Playfair Display", serif;
+        font-size: 5em;
+        margin-bottom: 20px;
+        background: linear-gradient(135deg, #ffffff 0%, #a8d5ff 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        font-weight: 800;
+        line-height: 1.2;
+        animation: slideIn 1s ease-out 0.5s both;
+      }
+
+      header p {
+        font-size: 1.4em;
+        opacity: 0.9;
+        font-weight: 300;
+        letter-spacing: 0.5px;
+        margin-bottom: 30px;
+        animation: slideIn 1s ease-out 0.7s both;
+      }
+
+      .header-divider {
+        width: 100px;
+        height: 4px;
+        background: var(--accent-gradient);
+        margin: 30px auto;
+        border-radius: 2px;
+        animation: expandWidth 1s ease-out 0.9s both;
+      }
+
+      @keyframes expandWidth {
+        from {
+          width: 0;
+        }
+        to {
+          width: 100px;
+        }
+      }
+
+      /* Nueva sección de contenido alternado */
+      .content-section {
+        margin-bottom: 80px;
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      .content-row {
+        display: flex;
+        align-items: center;
+        gap: 60px;
+        margin-bottom: 100px;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 30px;
+        padding: 50px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .content-row::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(
+          circle at top right,
+          rgba(102, 126, 234, 0.05) 0%,
+          transparent 60%
+        );
+        pointer-events: none;
+      }
+
+      .content-row:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 30px 80px rgba(102, 126, 234, 0.2);
+        transition: all 0.4s ease;
+      }
+
+      .content-row.reverse {
+        flex-direction: row-reverse;
+      }
+
+      .content-row.reverse::before {
+        background: radial-gradient(
+          circle at top left,
+          rgba(118, 75, 162, 0.05) 0%,
+          transparent 60%
+        );
+      }
+
+      .content-text {
+        flex: 1;
+        min-width: 300px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .content-visual {
+        flex: 0 0 350px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+      }
+
+      .section-badge {
+        display: inline-block;
+        background: var(--primary-gradient);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-size: 0.75em;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+      }
+
+      .content-row.reverse .section-badge {
+        background: var(--secondary-gradient);
+        box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+      }
+
+      .content-title {
+        font-family: "Playfair Display", serif;
+        font-size: 2.8em;
+        font-weight: 800;
+        color: var(--text-dark);
+        margin-bottom: 25px;
+        line-height: 1.2;
+      }
+
+      .content-description {
+        color: var(--text-light);
+        font-size: 1.15em;
+        line-height: 1.9;
+        margin-bottom: 20px;
+      }
+
+      .content-description strong {
+        color: var(--text-dark);
+        font-weight: 600;
+      }
+
+      .content-list {
+        list-style: none;
+        padding: 0;
+        margin: 25px 0;
+      }
+
+      .content-list li {
+        padding: 15px 0 15px 45px;
+        position: relative;
+        color: var(--text-light);
+        font-size: 1.08em;
+        line-height: 1.7;
+        transition: all 0.3s ease;
+      }
+
+      .content-list li:hover {
+        padding-left: 50px;
+        color: var(--text-dark);
+      }
+
+      .content-list li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 32px;
+        height: 32px;
+        background: var(--primary-gradient);
+        color: white;
+        font-weight: bold;
+        font-size: 0.9em;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .content-list li:hover::before {
+        transform: translateY(-50%) scale(1.15) rotate(360deg);
+      }
+
+      .content-highlight {
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.1) 0%,
+          rgba(118, 75, 162, 0.1) 100%
+        );
+        padding: 25px 30px;
+        border-radius: 16px;
+        margin: 25px 0;
+        border-left: 5px solid;
+        border-image: var(--primary-gradient);
+        border-image-slice: 1;
+        position: relative;
+      }
+
+      .content-highlight::before {
+        content: "💡";
+        position: absolute;
+        left: -15px;
+        top: -15px;
+        font-size: 2em;
+        background: white;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+      }
+
+      .visual-container {
+        position: relative;
+        width: 100%;
+        height: 350px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .visual-gif {
+        width: 100%;
+        max-width: 320px;
+        height: auto;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        transition: all 0.4s ease;
+      }
+
+      .content-row:hover .visual-gif {
+        transform: scale(1.05) rotate(2deg);
+        box-shadow: 0 30px 80px rgba(102, 126, 234, 0.3);
+      }
+
+      .visual-decoration {
+        position: absolute;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background: var(--primary-gradient);
+        opacity: 0.1;
+        z-index: -1;
+      }
+
+      .visual-decoration.top-left {
+        top: -20px;
+        left: -20px;
+      }
+
+      .visual-decoration.bottom-right {
+        bottom: -20px;
+        right: -20px;
+        background: var(--secondary-gradient);
+      }
+
+      .infografia-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+        gap: 35px;
+        margin-bottom: 60px;
+      }
+
+      .card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15),
+          0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 6px;
+        background: var(--primary-gradient);
+        transition: height 0.3s ease;
+      }
+
+      .card::after {
+        content: "";
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(102, 126, 234, 0.05) 0%,
+          transparent 70%
+        );
+        opacity: 0;
+        transition: opacity 0.4s ease;
+        pointer-events: none;
+      }
+
+      .card:hover {
+        transform: translateY(-12px) scale(1.02);
+        box-shadow: 0 30px 80px rgba(102, 126, 234, 0.25),
+          0 0 0 1px rgba(102, 126, 234, 0.1) inset;
+      }
+
+      .card:hover::before {
+        height: 100%;
+        opacity: 0.05;
+      }
+
+      .card:hover::after {
+        opacity: 1;
+      }
+
+      .card-icon {
+        width: 75px;
+        height: 75px;
+        border-radius: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 25px;
+        font-size: 36px;
+        background: var(--primary-gradient);
+        color: white;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        position: relative;
+        transition: all 0.4s ease;
+      }
+
+      .card:hover .card-icon {
+        transform: scale(1.1) rotate(5deg);
+        box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+      }
+
+      .card h2 {
+        color: var(--text-dark);
+        font-size: 1.85em;
+        font-weight: 700;
+        margin-bottom: 20px;
+        border-bottom: 3px solid transparent;
+        border-image: var(--primary-gradient);
+        border-image-slice: 1;
+        padding-bottom: 15px;
+        position: relative;
+      }
+
+      .card p,
+      .card ul {
+        color: var(--text-light);
+        line-height: 1.9;
+        font-size: 1.05em;
+        font-weight: 400;
+      }
+
+      .card ul {
+        list-style: none;
+        padding-left: 0;
+      }
+
+      .card ul li {
+        padding: 12px 0;
+        padding-left: 35px;
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      .card ul li:hover {
+        padding-left: 40px;
+        color: var(--text-dark);
+      }
+
+      .card ul li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        width: 24px;
+        height: 24px;
+        background: var(--primary-gradient);
+        color: white;
+        font-weight: bold;
+        font-size: 0.9em;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      .card ul li:hover::before {
+        transform: scale(1.2) rotate(360deg);
+      }
+
+      .highlight {
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.08) 0%,
+          rgba(118, 75, 162, 0.08) 100%
+        );
+        padding: 25px;
+        border-radius: 16px;
+        margin: 20px 0;
+        border-left: 4px solid;
+        border-image: var(--primary-gradient);
+        border-image-slice: 1;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .highlight::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          135deg,
+          transparent 0%,
+          rgba(102, 126, 234, 0.03) 100%
+        );
+        pointer-events: none;
+      }
+
+      .conclusion-section {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 30px;
+        padding: 60px 50px;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15),
+          0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+        text-align: center;
+        animation: fadeInUp 1s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .conclusion-section::before {
+        content: "";
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(
+          circle,
+          rgba(102, 126, 234, 0.05) 0%,
+          transparent 70%
+        );
+        animation: rotate 20s linear infinite;
+      }
+
+      @keyframes rotate {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .conclusion-section h2 {
+        font-family: "Playfair Display", serif;
+        color: var(--text-dark);
+        font-size: 2.8em;
+        font-weight: 800;
+        margin-bottom: 30px;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+      }
+
+      .conclusion-section p {
+        color: var(--text-light);
+        line-height: 2;
+        font-size: 1.18em;
+        font-weight: 400;
+        max-width: 950px;
+        margin: 0 auto 25px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .conclusion-section p strong {
+        color: var(--text-dark);
+        font-weight: 600;
+      }
+
+      .mecanismo-section {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 30px;
+        padding: 60px 50px;
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15),
+          0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+        margin-bottom: 60px;
+        animation: fadeInUp 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+      }
+
+      .mecanismo-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(
+          circle,
+          rgba(102, 126, 234, 0.1) 0%,
+          transparent 70%
+        );
+        pointer-events: none;
+      }
+
+      .mecanismo-section h2 {
+        font-family: "Playfair Display", serif;
+        color: var(--text-dark);
+        font-size: 2.6em;
+        font-weight: 800;
+        margin-bottom: 40px;
+        text-align: center;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        z-index: 1;
+      }
+
+      .mecanismo-content {
+        display: flex;
+        align-items: center;
+        gap: 45px;
+        flex-wrap: wrap;
+        position: relative;
+        z-index: 1;
+      }
+
+      .mecanismo-diagram {
+        flex: 1;
+        min-width: 320px;
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.05) 0%,
+          rgba(118, 75, 162, 0.05) 100%
+        );
+        padding: 35px;
+        border-radius: 20px;
+        border: 2px solid rgba(102, 126, 234, 0.2);
+        box-shadow: 0 10px 40px rgba(102, 126, 234, 0.1);
+      }
+
+      .mecanismo-diagram .step {
+        background: white;
+        padding: 20px 20px 20px 45px;
+        margin: 15px 0;
+        border-radius: 12px;
+        border-left: 5px solid;
+        border-image: var(--primary-gradient);
+        border-image-slice: 1;
+        position: relative;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+      }
+
+      .mecanismo-diagram .step:hover {
+        transform: translateX(8px);
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+      }
+
+      .mecanismo-diagram .step::before {
+        content: attr(data-step);
+        position: absolute;
+        left: -18px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 36px;
+        height: 36px;
+        background: var(--primary-gradient);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1em;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        transition: all 0.3s ease;
+      }
+
+      .mecanismo-diagram .step:hover::before {
+        transform: translateY(-50%) scale(1.15);
+      }
+
+      .mecanismo-diagram .step strong {
+        color: var(--text-dark);
+        font-weight: 600;
+        font-size: 1.05em;
+      }
+
+      .mecanismo-diagram .arrow {
+        text-align: center;
+        color: #667eea;
+        font-size: 28px;
+        margin: 8px 0;
+        animation: bounceArrow 2s ease-in-out infinite;
+      }
+
+      @keyframes bounceArrow {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(5px);
+        }
+      }
+
+      .mecanismo-text {
+        flex: 1;
+        min-width: 320px;
+      }
+
+      .mecanismo-text p {
+        color: var(--text-light);
+        line-height: 1.9;
+        font-size: 1.08em;
+        margin-bottom: 20px;
+        font-weight: 400;
+      }
+
+      .mecanismo-text p strong {
+        color: var(--text-dark);
+        font-weight: 600;
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideIn {
+        from {
+          opacity: 0;
+          transform: translateY(20px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @media (max-width: 968px) {
+        .content-row,
+        .content-row.reverse {
+          flex-direction: column;
+          padding: 40px 30px;
+          gap: 40px;
+        }
+
+        .content-visual {
+          flex: 1;
+          width: 100%;
+        }
+
+        .visual-container {
+          height: 300px;
+        }
+
+        .content-title {
+          font-size: 2.2em;
+        }
+
+        header h1 {
+          font-size: 3em;
+        }
+
+        header p {
+          font-size: 1.1em;
+        }
+
+        .infografia-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .card {
+          padding: 30px 25px;
+        }
+
+        .mecanismo-section,
+        .conclusion-section {
+          padding: 40px 30px;
+        }
+
+        .mecanismo-content {
+          flex-direction: column;
+        }
+
+        .conclusion-section h2 {
+          font-size: 2.2em;
+        }
+
+        .mecanismo-section h2 {
+          font-size: 2em;
+        }
+      }
+
+      footer {
+        text-align: center;
+        color: rgba(255, 255, 255, 0.8);
+        margin-top: 80px;
+        padding: 40px 20px;
+        background: rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      footer p {
+        margin: 8px 0;
+        font-size: 0.95em;
+        font-weight: 300;
+      }
+
+      footer p:first-child {
+        font-weight: 500;
+        font-size: 1.05em;
+      }
+
+      /* Scroll indicator */
+      .scroll-indicator {
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 2em;
+        animation: scrollBounce 2s infinite;
+        cursor: pointer;
+      }
+
+      @keyframes scrollBounce {
+        0%,
+        100% {
+          transform: translateX(-50%) translateY(0);
+        }
+        50% {
+          transform: translateX(-50%) translateY(10px);
+        }
+      }
+
+      /* GIF decorations */
+      .gif-decoration {
+        width: 100%;
+        max-width: 200px;
+        height: auto;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        margin: 20px auto;
+        display: block;
+      }
+
+      .card .gif-decoration {
+        max-width: 150px;
+        margin: 15px auto;
+      }
+
+      .hero-gif {
+        width: 100%;
+        max-width: 250px;
+        height: auto;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+        margin: 30px auto 0;
+        display: block;
+        border: 3px solid rgba(255, 255, 255, 0.2);
+      }
+
+      .mecanismo-gif {
+        max-width: 180px;
+        margin: 20px auto;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Particles background -->
+    <div class="particles" id="particles"></div>
+
+    <div class="container">
+      <header>
+        <div class="header-badge">Patrones de Diseño</div>
+        <h1>Template Method</h1>
+        <div class="header-divider"></div>
+        <p>Patrón de Diseño de Comportamiento</p>
+        <img
+          src="https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExazYzcnJoNmhwaGFvN2w1djZqZWQ1ZGh6OTZxdDZvcG13NnZicXc0NyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/wcgn5fVDjvR7pdvz4C/giphy.gif"
+          alt="Coding Animation"
+          class="hero-gif"
+        />
+        <div class="scroll-indicator">↓</div>
+      </header>
+
+      <!-- Sección 1: Descripción del Patrón -->
+      <div class="content-section" style="animation-delay: 0.2s">
+        <div class="content-row">
+          <div class="content-text">
+            <span class="section-badge">📋 Fundamentos</span>
+            <h2 class="content-title">Descripción del Patrón</h2>
+            <p class="content-description">
+              El patrón <strong>Template Method</strong> es un patrón de diseño
+              de comportamiento que define el esqueleto de un algoritmo en una
+              clase base, permitiendo que las subclases redefinan ciertos pasos
+              del algoritmo sin cambiar su estructura general.
+            </p>
+            <div class="content-highlight">
+              <p>
+                <strong>En esencia:</strong> Define la secuencia de pasos, pero
+                permite personalizar la implementación de algunos pasos
+                específicos. Es como tener una receta de cocina donde los pasos
+                son fijos, pero los ingredientes pueden variar.
+              </p>
+            </div>
+          </div>
+          <div class="content-visual">
+            <div class="visual-container">
+              <div class="visual-decoration top-left"></div>
+              <img
+                src="https://media.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif"
+                alt="Code Pattern"
+                class="visual-gif"
+              />
+              <div class="visual-decoration bottom-right"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección 2: Objetivos Principales -->
+      <div class="content-section" style="animation-delay: 0.3s">
+        <div class="content-row reverse">
+          <div class="content-text">
+            <span class="section-badge">🎯 Metas</span>
+            <h2 class="content-title">Objetivos Principales</h2>
+            <p class="content-description">
+              El patrón Template Method busca establecer una arquitectura sólida
+              y flexible que promueva la reutilización y mantenibilidad del
+              código.
+            </p>
+            <ul class="content-list">
+              <li>
+                <strong>Definir la estructura general</strong> de un algoritmo
+                de forma clara y consistente
+              </li>
+              <li>
+                <strong>Permitir la personalización</strong> de pasos
+                específicos sin afectar el flujo global
+              </li>
+              <li>
+                <strong>Evitar la duplicación</strong> de código común entre
+                clases relacionadas
+              </li>
+              <li>
+                <strong>Mantener el control del flujo</strong> centralizado en
+                la clase base
+              </li>
+              <li>
+                <strong>Facilitar la extensibilidad</strong> para agregar nuevas
+                variantes fácilmente
+              </li>
+            </ul>
+          </div>
+          <div class="content-visual">
+            <div class="visual-container">
+              <div class="visual-decoration top-left"></div>
+              <img
+                src="https://media.giphy.com/media/L1R1tvI9svkIWwpVYr/giphy.gif"
+                alt="Target Goals"
+                class="visual-gif"
+              />
+              <div class="visual-decoration bottom-right"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección 3: Problemática que Resuelve -->
+      <div class="content-section" style="animation-delay: 0.4s">
+        <div class="content-row">
+          <div class="content-text">
+            <span class="section-badge">❗ Soluciones</span>
+            <h2 class="content-title">Problemática que Resuelve</h2>
+            <p class="content-description">
+              Este patrón aborda desafíos comunes en el desarrollo de software
+              cuando trabajamos con algoritmos que comparten una estructura
+              similar pero difieren en detalles específicos.
+            </p>
+            <ul class="content-list">
+              <li>
+                <strong>Duplicación de código</strong> en algoritmos con
+                estructura similar
+              </li>
+              <li>
+                <strong>Inconsistencia</strong> en la implementación de procesos
+                complejos
+              </li>
+              <li>
+                <strong>Necesidad de variar</strong> partes específicas sin
+                alterar la estructura completa
+              </li>
+              <li>
+                <strong>Falta de control centralizado</strong> del flujo del
+                algoritmo
+              </li>
+              <li>
+                <strong>Código difícil de mantener</strong> cuando los cambios
+                afectan múltiples lugares
+              </li>
+            </ul>
+          </div>
+          <div class="content-visual">
+            <div class="visual-container">
+              <div class="visual-decoration top-left"></div>
+              <img
+                src="https://media.giphy.com/media/xTiTnxpQ3ghPiB2Hp6/giphy.gif"
+                alt="Problem Solving"
+                class="visual-gif"
+              />
+              <div class="visual-decoration bottom-right"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección 4: Beneficios -->
+      <div class="content-section" style="animation-delay: 0.5s">
+        <div class="content-row reverse">
+          <div class="content-text">
+            <span class="section-badge">✨ Ventajas</span>
+            <h2 class="content-title">Beneficios Clave</h2>
+            <p class="content-description">
+              Implementar el patrón Template Method aporta numerosas ventajas
+              que mejoran significativamente la calidad y mantenibilidad del
+              código.
+            </p>
+            <ul class="content-list">
+              <li>
+                <strong>Reutilización máxima:</strong> Todo el código común se
+                centraliza en un solo lugar
+              </li>
+              <li>
+                <strong>Mantenibilidad superior:</strong> Los cambios se
+                realizan una sola vez en la clase base
+              </li>
+              <li>
+                <strong>Extensibilidad garantizada:</strong> Agregar nuevas
+                variantes es simple y directo
+              </li>
+              <li>
+                <strong>Consistencia asegurada:</strong> El flujo del algoritmo
+                se mantiene uniforme
+              </li>
+              <li>
+                <strong>Principio OCP:</strong> Abierto a extensión, cerrado a
+                modificación
+              </li>
+              <li>
+                <strong>Inversión de Control:</strong> La clase base orquesta
+                todo el proceso
+              </li>
+            </ul>
+          </div>
+          <div class="content-visual">
+            <div class="visual-container">
+              <div class="visual-decoration top-left"></div>
+              <img
+                src="https://media.giphy.com/media/3o7qDSOvfaCO9b3MlO/giphy.gif"
+                alt="Success Benefits"
+                class="visual-gif"
+              />
+              <div class="visual-decoration bottom-right"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección 5: Desafíos -->
+      <div class="content-section" style="animation-delay: 0.6s">
+        <div class="content-row">
+          <div class="content-text">
+            <span class="section-badge">⚠️ Consideraciones</span>
+            <h2 class="content-title">Desafíos y Precauciones</h2>
+            <p class="content-description">
+              Como todo patrón de diseño, el Template Method tiene ciertos
+              desafíos que debemos considerar al momento de implementarlo en
+              nuestros proyectos.
+            </p>
+            <ul class="content-list">
+              <li>
+                <strong>Curva de aprendizaje:</strong> Puede ser difícil de
+                entender para desarrolladores nuevos
+              </li>
+              <li>
+                <strong>Acoplamiento aumentado:</strong> Incrementa la
+                dependencia entre clases base y derivadas
+              </li>
+              <li>
+                <strong>Rigidez estructural:</strong> Difícil modificar la
+                estructura del algoritmo una vez definida
+              </li>
+              <li>
+                <strong>Jerarquías complejas:</strong> Puede llevar a
+                estructuras de clases profundas
+              </li>
+              <li>
+                <strong>Diseño inicial crítico:</strong> Requiere definir
+                correctamente los pasos abstractos
+              </li>
+              <li>
+                <strong>Principio de Liskov:</strong> Se puede violar si no se
+                implementa cuidadosamente
+              </li>
+            </ul>
+          </div>
+          <div class="content-visual">
+            <div class="visual-container">
+              <div class="visual-decoration top-left"></div>
+              <img
+                src="https://media.giphy.com/media/xT77XWum9yH7zNkFW0/giphy.gif"
+                alt="Challenges"
+                class="visual-gif"
+              />
+              <div class="visual-decoration bottom-right"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección 6: Casos de Uso -->
+      <div class="content-section" style="animation-delay: 0.7s">
+        <div class="content-row reverse">
+          <div class="content-text">
+            <span class="section-badge">💼 Aplicaciones</span>
+            <h2 class="content-title">Casos de Uso Comunes</h2>
+            <p class="content-description">
+              El patrón Template Method es ampliamente utilizado en diversos
+              escenarios del desarrollo de software. Aquí están los casos más
+              frecuentes donde brilla este patrón.
+            </p>
+            <ul class="content-list">
+              <li>
+                <strong>Procesamiento de pedidos:</strong> Diferentes métodos de
+                pago con flujo común de validación
+              </li>
+              <li>
+                <strong>Generación de reportes:</strong> Mismo formato de
+                salida, diferentes fuentes de datos
+              </li>
+              <li>
+                <strong>Frameworks de testing:</strong> Ciclo de vida con setup,
+                ejecución y teardown
+              </li>
+              <li>
+                <strong>Construcción de documentos:</strong> PDF, HTML, XML
+                compartiendo estructura similar
+              </li>
+              <li>
+                <strong>Procesamiento de datos:</strong> Pipelines ETL con
+                diferentes formatos de entrada
+              </li>
+              <li>
+                <strong>Validación de formularios:</strong> Pasos de validación
+                comunes, reglas específicas
+              </li>
+            </ul>
+          </div>
+          <div class="content-visual">
+            <div class="visual-container">
+              <div class="visual-decoration top-left"></div>
+              <img
+                src="https://media.giphy.com/media/26tn33aiTi1jkl6H6/giphy.gif"
+                alt="Use Cases"
+                class="visual-gif"
+              />
+              <div class="visual-decoration bottom-right"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Descripción del Patrón -->
+      <div class="infografia-grid" style="display: none">
+        <div class="card" style="animation-delay: 0.1s">
+          <div class="card-icon">📋</div>
+          <h2>Descripción del Patrón</h2>
+          <p>
+            El patrón <strong>Template Method</strong> es un patrón de diseño de
+            comportamiento que define el esqueleto de un algoritmo en una clase
+            base, permitiendo que las subclases redefinan ciertos pasos del
+            algoritmo sin cambiar su estructura general.
+          </p>
+          <div class="highlight">
+            <p>
+              <strong>En esencia:</strong> Define la secuencia de pasos, pero
+              permite personalizar la implementación de algunos pasos
+              específicos.
+            </p>
+          </div>
+          <img
+            src="https://media.giphy.com/media/qgQUggAC3Pfv687qPC/giphy.gif"
+            alt="Code Pattern"
+            class="gif-decoration"
+          />
+        </div>
+
+        <!-- Objetivos Principales -->
+        <div class="card" style="animation-delay: 0.2s">
+          <div class="card-icon">🎯</div>
+          <h2>Objetivos Principales</h2>
+          <img
+            src="https://media.giphy.com/media/L1R1tvI9svkIWwpVYr/giphy.gif"
+            alt="Target Goals"
+            class="gif-decoration"
+          />
+          <ul>
+            <li>Definir la estructura general de un algoritmo</li>
+            <li>Permitir la personalización de pasos específicos</li>
+            <li>Evitar la duplicación de código común</li>
+            <li>Mantener el control del flujo en la clase base</li>
+            <li>Facilitar la extensibilidad del código</li>
+          </ul>
+        </div>
+
+        <!-- Problemática que Resuelve -->
+        <div class="card" style="animation-delay: 0.3s">
+          <div class="card-icon">❗</div>
+          <h2>Problemática que Resuelve</h2>
+          <img
+            src="https://media.giphy.com/media/xTiTnxpQ3ghPiB2Hp6/giphy.gif"
+            alt="Problem Solving"
+            class="gif-decoration"
+          />
+          <ul>
+            <li>Duplicación de código en algoritmos similares</li>
+            <li>Dificultad para mantener consistencia en procesos complejos</li>
+            <li>
+              Necesidad de variar partes específicas sin alterar la estructura
+            </li>
+            <li>Falta de control centralizado del flujo del algoritmo</li>
+            <li>Código difícil de mantener y extender</li>
+          </ul>
+        </div>
+
+        <!-- Beneficios -->
+        <div class="card" style="animation-delay: 0.4s">
+          <div class="card-icon">✨</div>
+          <h2>Beneficios</h2>
+          <img
+            src="https://media.giphy.com/media/3o7qDSOvfaCO9b3MlO/giphy.gif"
+            alt="Success Benefits"
+            class="gif-decoration"
+          />
+          <ul>
+            <li>
+              <strong>Reutilización:</strong> Código común en un solo lugar
+            </li>
+            <li>
+              <strong>Mantenibilidad:</strong> Cambios centralizados en la clase
+              base
+            </li>
+            <li>
+              <strong>Extensibilidad:</strong> Fácil agregar nuevas variantes
+            </li>
+            <li>
+              <strong>Consistencia:</strong> Garantiza el flujo del algoritmo
+            </li>
+            <li>
+              <strong>Principio OCP:</strong> Abierto a extensión, cerrado a
+              modificación
+            </li>
+            <li>
+              <strong>Inversión de Control:</strong> La clase base controla el
+              flujo
+            </li>
+          </ul>
+        </div>
+
+        <!-- Desafíos -->
+        <div class="card" style="animation-delay: 0.5s">
+          <div class="card-icon">⚠️</div>
+          <h2>Desafíos</h2>
+          <img
+            src="https://media.giphy.com/media/xT77XWum9yH7zNkFW0/giphy.gif"
+            alt="Challenges"
+            class="gif-decoration"
+          />
+          <ul>
+            <li>Puede ser difícil de entender para desarrolladores nuevos</li>
+            <li>Incrementa el acoplamiento entre clases base y derivadas</li>
+            <li>
+              Difícil modificar la estructura del algoritmo una vez definida
+            </li>
+            <li>Puede llevar a jerarquías de clases complejas</li>
+            <li>Requiere buen diseño inicial de los pasos abstractos</li>
+            <li>
+              Viola el Principio de Sustitución de Liskov si no se implementa
+              correctamente
+            </li>
+          </ul>
+        </div>
+
+        <!-- Casos de Uso Comunes -->
+        <div class="card" style="animation-delay: 0.6s">
+          <div class="card-icon">💼</div>
+          <h2>Casos de Uso Comunes</h2>
+          <img
+            src="https://media.giphy.com/media/26tn33aiTi1jkl6H6/giphy.gif"
+            alt="Use Cases"
+            class="gif-decoration"
+          />
+          <ul>
+            <li>
+              <strong>Procesamiento de pedidos:</strong> Diferentes métodos de
+              pago con flujo común
+            </li>
+            <li>
+              <strong>Generación de reportes:</strong> Mismo formato, diferentes
+              fuentes de datos
+            </li>
+            <li>
+              <strong>Frameworks de testing:</strong> Setup, ejecución y
+              teardown
+            </li>
+            <li>
+              <strong>Construcción de documentos:</strong> PDF, HTML, XML con
+              estructura similar
+            </li>
+            <li>
+              <strong>Procesamiento de datos:</strong> ETL con diferentes
+              formatos
+            </li>
+            <li>
+              <strong>Validación de formularios:</strong> Pasos comunes, reglas
+              específicas
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Mecanismo del Patrón -->
+      <div class="content-section" style="animation-delay: 0.8s">
+        <div class="content-row">
+          <div class="content-text">
+            <span class="section-badge">🔧 Funcionamiento</span>
+            <h2 class="content-title">Mecanismo del Patrón</h2>
+            <p class="content-description">
+              <strong>¿Cómo funciona?</strong><br />
+              El patrón Template Method establece un algoritmo en una clase base
+              que define la secuencia de pasos. Algunos pasos son implementados
+              directamente en la clase base (comportamiento común), mientras que
+              otros se declaran como métodos abstractos que las subclases deben
+              implementar.
+            </p>
+            <p class="content-description">
+              <strong>Flujo de ejecución:</strong><br />
+              Cuando se invoca el método template, este ejecuta los pasos en
+              orden predefinido, llamando tanto a los métodos implementados en
+              la clase base como a los métodos sobrescritos en las subclases,
+              garantizando que el algoritmo siempre siga la misma estructura.
+            </p>
+            <ul class="content-list">
+              <li>
+                <strong>Paso 1:</strong> Se define la clase abstracta base con
+                el método template
+              </li>
+              <li>
+                <strong>Paso 2:</strong> Se declaran métodos abstractos que las
+                subclases deben implementar
+              </li>
+              <li>
+                <strong>Paso 3:</strong> Se definen métodos hook opcionales con
+                comportamiento por defecto
+              </li>
+              <li>
+                <strong>Paso 4:</strong> Las subclases concretas implementan los
+                métodos abstractos
+              </li>
+              <li>
+                <strong>Paso 5:</strong> El cliente invoca el método template
+                que coordina la ejecución
+              </li>
+            </ul>
+            <div class="content-highlight">
+              <p>
+                <strong>Principio de Hollywood:</strong> "No nos llames,
+                nosotros te llamaremos". La clase base controla el flujo
+                completo y llama a los métodos de las subclases cuando es
+                necesario.
+              </p>
+            </div>
+          </div>
+          <div class="content-visual">
+            <div class="visual-container">
+              <div class="visual-decoration top-left"></div>
+              <img
+                src="https://media.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif"
+                alt="Workflow Mechanism"
+                class="visual-gif"
+              />
+              <div class="visual-decoration bottom-right"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Conclusión -->
+      <div class="content-section" style="animation-delay: 0.9s">
+        <div class="conclusion-section">
+          <h2>🎓 Conclusión</h2>
+          <img
+            src="https://media.giphy.com/media/l0HlHFRbmaZtBRhXG/giphy.gif"
+            alt="Graduation Success"
+            class="gif-decoration"
+          />
+          <p>
+            El patrón <strong>Template Method</strong> es una herramienta
+            poderosa para diseñar algoritmos flexibles y mantenibles. Al definir
+            la estructura general en una clase base y permitir que las subclases
+            personalicen pasos específicos, se logra un equilibrio perfecto
+            entre reutilización de código y flexibilidad. Es especialmente útil
+            cuando múltiples clases comparten la misma secuencia de operaciones
+            pero difieren en la implementación de ciertos pasos.
+          </p>
+          <br />
+          <p>
+            Sin embargo, es importante usarlo con criterio: funciona mejor
+            cuando la estructura del algoritmo es estable y solo varían los
+            detalles de implementación. El patrón promueve el
+            <strong>Principio de Inversión de Dependencias</strong> y el
+            <strong>Principio Abierto/Cerrado</strong>, facilitando la extensión
+            del sistema sin modificar código existente.
+          </p>
+        </div>
+      </div>
+
+      <footer>
+        <p>📚 Patrón Template Method - Patrones de Diseño de Software</p>
+        <p>© 2025 - Material Educativo</p>
+      </footer>
+    </div>
+
+    <script>
+      // Create particles background
+      document.addEventListener("DOMContentLoaded", () => {
+        const particlesContainer = document.getElementById("particles");
+        const particleCount = 30;
+
+        for (let i = 0; i < particleCount; i++) {
+          const particle = document.createElement("div");
+          particle.className = "particle";
+
+          const size = Math.random() * 4 + 2;
+          particle.style.width = `${size}px`;
+          particle.style.height = `${size}px`;
+          particle.style.left = `${Math.random() * 100}%`;
+          particle.style.top = `${Math.random() * 100}%`;
+          particle.style.animationDelay = `${Math.random() * 20}s`;
+          particle.style.animationDuration = `${Math.random() * 10 + 15}s`;
+
+          particlesContainer.appendChild(particle);
+        }
+
+        // Intersection Observer for content sections animation
+        const contentSections = document.querySelectorAll(
+          ".content-section, .content-row, .card, .mecanismo-section, .conclusion-section"
+        );
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.style.opacity = "1";
+                entry.target.style.transform = "translateY(0)";
+              }
+            });
+          },
+          {
+            threshold: 0.1,
+          }
+        );
+
+        contentSections.forEach((section) => {
+          observer.observe(section);
+        });
+
+        // Smooth parallax effect on scroll
+        let ticking = false;
+        window.addEventListener("scroll", () => {
+          if (!ticking) {
+            window.requestAnimationFrame(() => {
+              const scrolled = window.pageYOffset;
+              const header = document.querySelector("header");
+              if (header && scrolled < 600) {
+                header.style.transform = `translateY(${scrolled * 0.3}px)`;
+                header.style.opacity = 1 - scrolled / 600;
+              }
+              ticking = false;
+            });
+            ticking = true;
+          }
+        });
+
+        // Scroll indicator click
+        const scrollIndicator = document.querySelector(".scroll-indicator");
+        if (scrollIndicator) {
+          scrollIndicator.addEventListener("click", () => {
+            window.scrollTo({
+              top: window.innerHeight - 100,
+              behavior: "smooth",
+            });
+          });
+        }
+
+        // Add gradient variations to card icons
+        const cardIcons = document.querySelectorAll(".card-icon");
+        const gradients = [
+          "var(--primary-gradient)",
+          "var(--secondary-gradient)",
+          "var(--accent-gradient)",
+          "var(--gold-gradient)",
+          "var(--green-gradient)",
+          "var(--dark-gradient)",
+        ];
+
+        cardIcons.forEach((icon, index) => {
+          icon.style.background = gradients[index % gradients.length];
+        });
+      });
+    </script>
+  </body>
+</html>
