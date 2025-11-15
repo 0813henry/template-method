@@ -312,19 +312,6 @@ El **Template Method** es un patrón de diseño de comportamiento que:
 
 ## 📚 Aprende Más
 
-### Documentación Detallada
-
-- **[README-WITHOUT-PATTERN.md](./README-WITHOUT-PATTERN.md)**
-
-  - Problemas de código duplicado
-  - Dificultades de mantenimiento
-  - Métricas detalladas
-
-- **[README-WITH-PATTERN.md](./README-WITH-PATTERN.md)**
-  - Implementación del patrón
-  - Ventajas y beneficios
-  - Guía de extensión
-
 ### Recursos Adicionales
 
 - [Refactoring Guru - Template Method](https://refactoring.guru/design-patterns/template-method)
@@ -358,23 +345,6 @@ Si encuentras errores o tienes sugerencias de mejora:
 
 ## 📄 Licencia
 
-Este proyecto es de código abierto y está disponible bajo la licencia MIT.
-
----
-
-**Autor:** Sistema de Demostración de Patrones de Diseño  
-**Fecha:** Noviembre 2025  
-**Versión:** 1.0
-languageOptions: {
-parserOptions: {
-project: ['./tsconfig.node.json', './tsconfig.app.json'],
-tsconfigRootDir: import.meta.dirname,
-},
-// other options...
-},
-},
-])
-
-```
+Este proyecto es de código abierto y está disponible para todos.
 
 ```
