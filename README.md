@@ -63,12 +63,6 @@ Este proyecto educativo incluye:
 - `src/without-pattern/` - **Código sin patrón** (para comparación educativa)
 - `src/App.tsx` - Interfaz interactiva para ejecutar y comparar ambas versiones
 
-### 📄 Documentación
-
-- `DIAGRAMA-CLASES.md` - Diagrama UML completo con explicación de componentes
-- `README-WITH-PATTERN.md` - Documentación detallada de la implementación
-- `README-WITHOUT-PATTERN.md` - Análisis de problemas sin el patrón
-
 ## 🔍 Diagrama de Clases
 
 Para ver el diagrama UML completo del sistema, consulta: **[DIAGRAMA-CLASES.md](./DIAGRAMA-CLASES.md)**
@@ -184,16 +178,12 @@ protected validateOrder(order: Order): boolean {
 - ❌ Riesgo de inconsistencias
 - ❌ Baja extensibilidad
 
-**📖 Documentación detallada:** [README-WITHOUT-PATTERN.md](./README-WITHOUT-PATTERN.md)
-
 ### 2️⃣ Con Patrón Template Method (`src/with-pattern/`)
 
 - ✅ Sin código duplicado
 - ✅ Fácil de mantener
 - ✅ Flujo consistente garantizado
 - ✅ Alta extensibilidad
-
-**📖 Documentación detallada:** [README-WITH-PATTERN.md](./README-WITH-PATTERN.md)
 
 ## 🚀 Inicio Rápido
 
@@ -231,8 +221,6 @@ Abre tu navegador en `http://localhost:5173` y podrás:
 ```
 template-method/
 ├── README.md                      # Este archivo
-├── README-WITHOUT-PATTERN.md      # Documentación sin patrón
-├── README-WITH-PATTERN.md         # Documentación con patrón
 ├── src/
 │   ├── without-pattern/           # Implementación SIN patrón
 │   │   ├── models/
