@@ -997,6 +997,16 @@
               clase base, permitiendo que las subclases redefinan ciertos pasos
               del algoritmo sin cambiar su estructura general.
             </p>
+            <div class="content-highlight" style="margin-top: 1em">
+              <strong>Definición del libro:</strong><br />
+              <em
+                >"Define el esqueleto de un algoritmo en una operación
+                (entendiendo operación como función o método), delegando algunos
+                de estos pasos a subclases. El patrón template-method permite
+                que subclases redefinan ciertos pasos de un algoritmo sin
+                cambiar la estructura del algoritmo"</em
+              >
+            </div>
             <div class="content-highlight">
               <p>
                 <strong>En esencia:</strong> Define la secuencia de pasos, pero
@@ -1016,6 +1026,102 @@
               />
               <div class="visual-decoration bottom-right"></div>
             </div>
+          </div>
+        </div>
+      </div>
+
+ <!-- Sección: Problema Clásico -->
+      <div class="content-section" style="animation-delay: 0.3s">
+        <div class="content-row">
+          <div class="content-text">
+            <span class="section-badge">❌ Problema Clásico</span>
+            <h2 class="content-title">El Problema</h2>
+            <p class="content-description">
+              Sin el patrón Template Method, las clases concretas duplican
+              código común y no tienen una estructura consistente para
+              implementar algoritmos similares.
+            </p>
+          </div>
+          <div class="content-visual">
+            <div
+              class="code-container"
+              style="
+                background: #1e1e2f;
+                padding: 16px;
+                border-radius: 8px;
+                box-shadow: 0 4px 24px #0002;
+              "
+            >
+              <pre
+                style="
+                  color: #c5c6c7;
+                  font-family: 'Courier New', Courier, monospace;
+                  font-size: 14px;
+                "
+              >
+                <code>
+<!-- Simulación de Visual Studio Code -->
+<div style="background: #1e1e2f; border-radius: 8px; box-shadow: 0 4px 24px #0002; overflow: hidden; font-family: 'Fira Mono', 'Consolas', 'Courier New', monospace; font-size: 15px;">
+  <!-- Barra superior tipo VSCode -->
+  <div style="background: #232336; height: 32px; display: flex; align-items: center; padding: 0 12px;">
+    <span style="display: inline-block; width: 10px; height: 10px; background: #ff5f56; border-radius: 50%; margin-right: 6px;"></span>
+    <span style="display: inline-block; width: 10px; height: 10px; background: #ffbd2e; border-radius: 50%; margin-right: 6px;"></span>
+    <span style="display: inline-block; width: 10px; height: 10px; background: #27c93f; border-radius: 50%;"></span>
+    <span style="margin-left: 16px; color: #c5c6c7; font-size: 13px; opacity: 0.7;">Clasico problema</span>
+  </div>
+  <!-- Código coloreado -->
+  <pre style="margin: 0; padding: 18px 20px; background: #1e1e2f; color: #d4d4d4; overflow-x: auto;">
+<span style="color:#569cd6;">class</span> <span style="color:#4ec9b0;">A</span> {
+  <span style="color:#dcdcaa;">myMethod</span>() {
+    <span style="color:#dcdcaa;">step1</span>();
+    <span style="color:#ce9178;">console</span>.log(<span style="color:#b5cea8;">'Implementación específica de la clase A'</span>);
+    <span style="color:#dcdcaa;">step3</span>();
+  }
+}
+
+<span style="color:#569cd6;">class</span> <span style="color:#4ec9b0;">B</span> {
+  <span style="color:#dcdcaa;">myMethod</span>() {
+    <span style="color:#dcdcaa;">step1</span>();
+    <span style="color:#ce9178;">console</span>.log(<span style="color:#b5cea8;">'Implementación específica de la clase B'</span>);
+    <span style="color:#dcdcaa;">step3</span>();
+  }
+}
+  </pre>
+</div>
+                </code>
+              </pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección: Estructura del Patrón -->
+      <div class="content-section" style="animation-delay: 0.25s">
+        <div class="content-row">
+          <div class="content-text">
+        <span class="section-badge">🏗️ Estructura</span>
+        <h2 class="content-title">Estructura del Patrón Template Method</h2>
+        <p class="content-description">
+          La estructura típica del patrón Template Method consiste en una
+          clase abstracta que define el método plantilla (template method) y
+          varios métodos que pueden ser implementados o sobrescritos por las
+          subclases concretas. Esto permite definir el esqueleto del
+          algoritmo y delegar los pasos variables.
+        </p>
+          </div>
+          <div class="content-visual">
+        <div class="visual-container" style="flex-direction: column; gap: 18px;">
+          <img
+        src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Template_Method_UML_class_diagram.svg"
+        alt="Template Method UML"
+        style="
+          max-width: 320px;
+          border-radius: 12px;
+          box-shadow: 0 4px 24px #0002;
+          background: #fff;
+        "
+          />
+        </div>
           </div>
         </div>
       </div>
@@ -1050,23 +1156,24 @@
               </li>
               <li>
                 <strong>Facilitar la extensibilidad</strong> para agregar nuevas
-                variantes fácilmente
-              </li>
-            </ul>
-          </div>
-          <div class="content-visual">
-            <div class="visual-container">
-              <div class="visual-decoration top-left"></div>
-              <img
-                src="https://media.giphy.com/media/L1R1tvI9svkIWwpVYr/giphy.gif"
-                alt="Target Goals"
-                class="visual-gif"
-              />
-              <div class="visual-decoration bottom-right"></div>
-            </div>
-          </div>
-        </div>
+        variantes fácilmente
+        </li>
+      </ul>
       </div>
+      <div class="content-visual">
+      <div class="visual-container">
+        <div class="visual-decoration top-left"></div>
+        <img
+        src="https://media.giphy.com/media/L1R1tvI9svkIWwpVYr/giphy.gif"
+        alt="Target Goals"
+        class="visual-gif"
+        style="margin: 0 auto; display: block;"
+        />
+        <div class="visual-decoration bottom-right"></div>
+      </div>
+      </div>
+    </div>
+    </div>
 
       <!-- Sección 3: Problemática que Resuelve -->
       <div class="content-section" style="animation-delay: 0.4s">
@@ -1200,10 +1307,7 @@
                 <strong>Diseño inicial crítico:</strong> Requiere definir
                 correctamente los pasos abstractos
               </li>
-              <li>
-                <strong>Principio de Liskov:</strong> Se puede violar si no se
-                implementa cuidadosamente
-              </li>
+              <li><strong implementa cuidadosamente</li>
             </ul>
           </div>
           <div class="content-visual">

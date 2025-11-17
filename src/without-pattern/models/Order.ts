@@ -18,12 +18,21 @@ export interface OrderItem {
   unitPrice: number;
 }
 
-export enum OrderStatus {
-  PENDING = "PENDING",
-  VALIDATED = "VALIDATED",
-  PAYMENT_PROCESSED = "PAYMENT_PROCESSED",
-  SHIPPED = "SHIPPED",
-  COMPLETED = "COMPLETED",
-  FAILED = "FAILED",
-  CANCELLED = "CANCELLED",
-}
+export type OrderStatus =
+  | "PENDING"
+  | "VALIDATED"
+  | "PAYMENT_PROCESSED"
+  | "SHIPPED"
+  | "COMPLETED"
+  | "FAILED"
+  | "CANCELLED";
+
+export const OrderStatus = {
+  PENDING: "PENDING",
+  VALIDATED: "VALIDATED",
+  PAYMENT_PROCESSED: "PAYMENT_PROCESSED",
+  SHIPPED: "SHIPPED",
+  COMPLETED: "COMPLETED",
+  FAILED: "FAILED",
+  CANCELLED: "CANCELLED",
+} as const;
